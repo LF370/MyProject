@@ -9,6 +9,7 @@ using namespace std;
 int main(void )
 {	    
     double dist = 0;
+    printf("I had pull from svn");
     printf("------------------This is a test stub-----------------\n");
     char *driver = "SHAPE_ENCODING";
     int ret = initPiple(driver);
