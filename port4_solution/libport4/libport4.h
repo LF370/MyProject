@@ -26,6 +26,9 @@ extern "C"{
     int initPiple( char *_driver_str);
     // 打开一个管道（就是链接一个shp或其它数据源)
     int openPiple( char *_piple_na );
+
+    // 打开一个管道
+    int openPiple(char *_driver, char* _piple_n );
     // 关闭一个管道
     int closePiple();
     // 获取记录数量
@@ -36,6 +39,14 @@ extern "C"{
     int getFeatureValue( char* _fld_na, std::vector<std::string>& _values );
     // 获取几何形状几何，返回wkt 标准字符串
     int getFeatureGeom( std::vector< std::string >& _wkt_tbl);
+
+    // 执行SQL 指令
+    int runSQL( std::string _sql);
+
+    // 收集记录集合
+    // _geom_flg ：是否加载geom字段
+    int runSQL( std::string _sql, std::vector<std::string>& _table , bool _geom_flg= false, int bash=-1 ) ;
+    
 #endif 
 
 

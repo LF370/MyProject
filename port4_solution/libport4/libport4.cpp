@@ -12,6 +12,7 @@ using namespace std;
 
 static GDALDataset * g_pDS(NULL);
 
+
 DLL_EXPORT int hitPolygon( double _x1, double _y1, const std::vector<std::pair<double,double>>& _polygon )
 {
     OGRSpatialReference srf;
@@ -64,6 +65,22 @@ DLL_EXPORT int openPiple( char* _piple_na )
 {    
     g_pDS = (GDALDataset*)GDALOpenEx( _piple_na, GDAL_OF_VECTOR, NULL,NULL,NULL);
     return g_pDS? 1:0;
+}
+
+DLL_EXPORT int openPiple(char *_driver, char* _piple_n )
+{     
+
+    GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName( _driver );
+
+    if( poDriver == NULL )
+    {
+        cout <<"Init pg failed!!!"<< endl;
+        return 0;
+    }      
+
+    g_pDS = poDriver->Create( _piple_n,0,0,0,GDT_Unknown,NULL);
+    return g_pDS? 1:0;
+   
 }
 
 DLL_EXPORT int closePiple( )
@@ -146,4 +163,49 @@ DLL_EXPORT int getFeatureGeom(std::vector< string >& _wkt_tbl)
      return 1;
 
 
+}
+
+DLL_EXPORT int runSQL(string _sql)
+{    
+    OGRLayer* p_layer = g_pDS->ExecuteSQL( _sql.c_str(), NULL, NULL );
+    return p_layer? 1:0;    
+}
+
+    // 收集记录集合
+DLL_EXPORT int runSQL( std::string _sql, std::vector<std::string>& _table , bool _geom_flg, int _bash  )
+{
+     OGRLayer* p_layer = g_pDS->ExecuteSQL( _sql.c_str(), NULL, NULL );
+     if( p_layer == 0 ) return 0;
+
+     p_layer->ResetReading();     
+     OGRFeatureDefn * fld_def = p_layer->GetLayerDefn();
+     int n_fld = fld_def->GetFieldCount();
+     cout <<"fld num:"<< n_fld;
+
+     OGRFeature * fld;
+     int row = 0;
+     while(  (fld = p_layer->GetNextFeature() ) != NULL && ( _bash < 0 ? 1: ( row <_bash)) )
+     {
+         string values="";
+         for( int i = 0; i< n_fld; i++ )
+         {
+             values += fld->GetFieldAsString( i );
+             values +=":";             
+         }
+
+         if( _geom_flg )
+         {
+             OGRGeometry* p_geom = fld->GetGeometryRef();
+             char *pszwkt = NULL;
+             p_geom->exportToWkt(&pszwkt);
+             values += string( pszwkt );         
+         }
+         else
+         {
+             values.pop_back();
+         }       
+         row++;      
+         _table.push_back( values );
+     }
+     return _table.size();
 }
