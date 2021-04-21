@@ -54,20 +54,20 @@ DLL_EXPORT int hitPolygon( double _x1, double _y1, const std::vector<std::pair<d
     return ret == TRUE? 1:0;
 
 }
-DLL_EXPORT int initPiple( char *_driver_str)
+DLL_EXPORT int initPiple( const char *_driver_str)
 {
     GDALAllRegister();
     CPLSetConfigOption( _driver_str,"" );
     return 1;
 }
 
-DLL_EXPORT int openPiple( char* _piple_na )
+DLL_EXPORT int openPiple( const char* _piple_na )
 {    
     g_pDS = (GDALDataset*)GDALOpenEx( _piple_na, GDAL_OF_VECTOR, NULL,NULL,NULL);
     return g_pDS? 1:0;
 }
 
-DLL_EXPORT int openPiple(char *_driver, char* _piple_n )
+DLL_EXPORT int openPiple( const char *_driver, const char* _piple_n )
 {     
 
     GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName( _driver );

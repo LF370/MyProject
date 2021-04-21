@@ -23,12 +23,12 @@ extern "C"{
 
 // 读取符合OGR标准文件
     // 初始化环境
-    int initPiple( char *_driver_str);
+    int initPiple( const char *_driver_str);
     // 打开一个管道（就是链接一个shp或其它数据源)
-    int openPiple( char *_piple_na );
+    int openPiple( const char *_piple_na );
 
     // 打开一个管道
-    int openPiple(char *_driver, char* _piple_n );
+    int openPiple( const char *_driver, const char* _piple_n );
     // 关闭一个管道
     int closePiple();
     // 获取记录数量
@@ -36,7 +36,7 @@ extern "C"{
     // 获取属性列表
     int getFeatureList( int n, std::vector<std::string>& _feature_ls );
     // 获取某指定属性的集合
-    int getFeatureValue( char* _fld_na, std::vector<std::string>& _values );
+    int getFeatureValue( const char* _fld_na, std::vector<std::string>& _values );
     // 获取几何形状几何，返回wkt 标准字符串
     int getFeatureGeom( std::vector< std::string >& _wkt_tbl);
 
