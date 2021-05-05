@@ -9,6 +9,7 @@
 #include<regex>
 
 #include"../libport4/libport4.h"
+#include"SqlCmdBuilder.h"
 
 using namespace std;
 
@@ -54,13 +55,20 @@ class CRouteRPath
 class CRouteDBPiple
 {
     public:
+    // 打开一个管道
+    int createPiple() const ;
+    // 关闭一个管道
+    int close() const;
 
-
+    int initSqlCmdBuilder(string _xml_filena);
 
     public:
+    string& pipleConnector() { return m_piple_connector; }
+    string& pipleDriver() { return m_piple_driver; }
 
-    
-
+    public:   
+    // SQL 业务
+    // 收集所有的车道关联关系
     int collectLaneEdge();
     
     
@@ -71,12 +79,16 @@ class CRouteDBPiple
 
 
     private:
+    // 记录集处理工具
     int getfld( RECORD _rec, int _n, FLDVALUE& _value ) const ;
 
     private:
-
     CRouteDataSet m_data_set;
 
+    string m_piple_connector;
+    string m_piple_driver;
+
+    CSqlCmdBuilder m_sqlcmd_builder;
 
 
 };

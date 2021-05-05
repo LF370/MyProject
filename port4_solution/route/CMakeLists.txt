@@ -7,6 +7,11 @@ message(STATUS "${PORT4_LIB_PATH}")
 message(STATUS "${PORT4_LIB_H}")
 
 
+message(STATUS "=====PDAL Envorment=====")
+message(Status "......${GDAL_INCLUDE_DIRS}")
+message(Status "......${GDAL_LIBRARY}")
+
+
 #set(CMAKE_BUILD_TYPE,"Debug")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,5 +25,7 @@ add_executable( route ${DIR_SRCS})
 #add_executable( LIBPort4 libport4.c)
 
 target_link_libraries( route  PRIVATE ${PORT4_LIB_PATH})
+target_link_libraries( route  PRIVATE tinyxml )
+
 
 

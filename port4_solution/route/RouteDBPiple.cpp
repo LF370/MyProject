@@ -1,5 +1,25 @@
 #include"RouteDBPiple.h"
 
+int CRouteDBPiple::createPiple() const
+{
+    const char *shp_fmt = "SHAPE_ENCODING";
+    int ret = initPiple(shp_fmt);
+    if( ret == 0 ) return 0;        
+
+    ret = openPiple( m_piple_driver.c_str(), m_piple_connector.c_str());
+
+    return ret;
+}
+
+int CRouteDBPiple::initSqlCmdBuilder( string _xml_fna )
+{
+    return m_sqlcmd_builder.open( _xml_fna );    
+}
+
+int CRouteDBPiple::close() const
+{
+    return closePiple();
+}
 
 int CRouteDBPiple::getfld( RECORD _rec, int _n, FLDVALUE& _value ) const
 {
@@ -16,9 +36,13 @@ int CRouteDBPiple::getfld( RECORD _rec, int _n, FLDVALUE& _value ) const
 int CRouteDBPiple::collectLaneEdge( )
 {
     vector<string> tables;
-    string sql_cmd = "select rvid, id,rsecseq, num, source,target from tb_l_edge order by rvid,rsecseq,num";
-    cout <<sql_cmd.c_str() << endl;
-    int ret = runSQL( sql_cmd, tables,false);
+    string sql_cmd;
+    // = "select rvid, id,rsecseq, num, source,target from tb_l_edge order by rvid,rsecseq,num";    
+    int ret = m_sqlcmd_builder.getSqlCmd("Query","SEL_LOAD_ROUTE_EDGE", sql_cmd);
+    if( ret ) return 0;
+    cout <<sql_cmd << endl;
+
+    ret = runSQL( sql_cmd, tables,false);
 
     regex sep("[ \t\n]*[:][ \t\n]*");
     for_each( tables.begin(), tables.end(), [&sep, this](string _ele){
@@ -30,7 +54,7 @@ int CRouteDBPiple::collectLaneEdge( )
         auto& rec_list = m_data_set.RvID2LedgeListMap()[rvid];
         rec_list.push_back( _ele );  
     });
-    return 0;
+    return (int) m_data_set.RvID2LedgeListMap().size();
 }
 
 
