@@ -171,6 +171,29 @@ DLL_EXPORT int runSQL(string _sql)
     return p_layer? 1:0;    
 }
 
+DLL_EXPORT int runSQL(string _sql, string& _ret_value )
+{    
+    OGRLayer* p_layer = g_pDS->ExecuteSQL( _sql.c_str(), NULL, NULL );
+    if( p_layer == 0 ) return 0;
+
+    p_layer->ResetReading();     
+     OGRFeatureDefn * fld_def = p_layer->GetLayerDefn();
+     
+     
+     OGRFeature * fld;
+     int row = 0;
+     if ( (fld = p_layer->GetNextFeature() ) != NULL )
+     {         
+         _ret_value = fld->GetFieldAsString( 0 );
+         return 1;
+     }
+     else
+     {
+         return 0;
+     }  
+    
+}
+
     // 收集记录集合
 DLL_EXPORT int runSQL( std::string _sql, std::vector<std::string>& _table , bool _geom_flg, int _bash  )
 {
@@ -180,8 +203,7 @@ DLL_EXPORT int runSQL( std::string _sql, std::vector<std::string>& _table , bool
      p_layer->ResetReading();     
      OGRFeatureDefn * fld_def = p_layer->GetLayerDefn();
      int n_fld = fld_def->GetFieldCount();
-     cout <<"fld num:"<< n_fld;
-
+     
      OGRFeature * fld;
      int row = 0;
      while(  (fld = p_layer->GetNextFeature() ) != NULL && ( _bash < 0 ? 1: ( row <_bash)) )

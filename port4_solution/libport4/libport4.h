@@ -40,8 +40,11 @@ extern "C"{
     // 获取几何形状几何，返回wkt 标准字符串
     int getFeatureGeom( std::vector< std::string >& _wkt_tbl);
 
-    // 执行SQL 指令
+    // 执行SQL 指令, 无返回值
     int runSQL( std::string _sql);
+
+    // 执行SQL 指令，有返回值，如调用存储过程
+    int runSQL( std::string _sqlcmd, std::string& _ret_value );
 
     // 收集记录集合
     // _geom_flg ：是否加载geom字段

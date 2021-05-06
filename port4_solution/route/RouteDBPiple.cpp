@@ -1,4 +1,5 @@
 #include"RouteDBPiple.h"
+#include<regex>
 
 int CRouteDBPiple::createPiple() const
 {
@@ -55,6 +56,48 @@ int CRouteDBPiple::collectLaneEdge( )
         rec_list.push_back( _ele );  
     });
     return (int) m_data_set.RvID2LedgeListMap().size();
+}
+
+int CRouteDBPiple::getNearestVertic( double _x, double _y, double _z, bool _se, int& _vertic_id )
+{
+    string sql_cmd;
+    // = "select rvid, id,rsecseq, num, source,target from tb_l_edge order by rvid,rsecseq,num";    
+    int ret = m_sqlcmd_builder.getSqlCmd("PROD","PRO_GET_VERTICES", sql_cmd);
+    if( ret ) return 0;
+    cout <<sql_cmd << endl;
+
+    // 参数替换
+    regex reg("((%[0-9]\\,){3}%[0-9])");
+    smatch m; 
+    bool found= regex_search( sql_cmd,m, reg );
+    if( !found  ) return 0;
+    cout << m.str() << endl;
+
+    string para_str = to_string( _x ) + ','+ to_string( _y ) +','+ "4326" + ',' ;
+    para_str += _se? "TRUE":"FALSE";
+    
+    sql_cmd = regex_replace( sql_cmd, reg, para_str);
+    cout << sql_cmd << endl;
+
+    string ret_v;
+    ret = runSQL( sql_cmd,  ret_v );
+    cout << ret_v << endl;
+    
+
+    // cout <<"find"<< m.size() << endl;
+    // cout << "m.length:"<<m.length()<< endl;;
+    // cout << "m.position:" << m.position()<<endl;
+    // cout << "m.prefix:"<<m.prefix() << endl;
+    // cout <<"m.suffix:"<< m.suffix() << endl;
+    // for( auto pos = m.begin(); pos != m.end(); pos++ )
+    // {
+    //     cout <<*pos << endl;
+        
+    // }
+    return 1;
+
+
+
 }
 
 

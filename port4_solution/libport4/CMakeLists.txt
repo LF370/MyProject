@@ -19,7 +19,6 @@ include_directories(${GDAL_INCLUDE_DIRS})
 aux_source_directory(. DIR_SRCS)
 message(Status "......${DIR_SRCS}")
 
-#add_library( ${ProjNa} EXCLUDE_FROM_ALL main.c)
 add_library( ${ProjNa} SHARED ${DIR_SRCS} )
 
 #add_executable( LIBPort4 libport4.c)

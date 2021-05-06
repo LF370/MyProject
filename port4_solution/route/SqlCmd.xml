@@ -2,4 +2,7 @@
     <Query>
         <SEL_LOAD_ROUTE_EDGE>select rvid, id,rsecseq, num, source,target from tb_l_edge order by rvid,rsecseq,num</SEL_LOAD_ROUTE_EDGE>
     </Query>
+    <PROD>
+    <PRO_GET_VERTICES>select fn_closest_vertices(%1,%2,%3,%4)</PRO_GET_VERTICES>
+    </PROD>
 </SQL_CMD>

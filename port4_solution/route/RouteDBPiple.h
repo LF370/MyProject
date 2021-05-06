@@ -70,12 +70,19 @@ class CRouteDBPiple
     // SQL 业务
     // 收集所有的车道关联关系
     int collectLaneEdge();
+
+    // SQL 业务
+    // 获取给定点最近的拓扑顶点
+    int getNearestVertic( double _x, double _y, double _z, bool _se, int& _vertic_id );
+    
     
     
     // _secum 0 : the first section
     //        1..n : the section 
     //        -1: the last section
     int filterLaneEdgeByR( TOKEN _rvid, int _secnum, vector<TOKEN>& _lvid_tb );
+
+    
 
 
     private:

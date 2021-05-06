@@ -38,6 +38,9 @@ int main(void )
     int loadsz = route_piple.collectLaneEdge();
     cout <<"Collected finished.........."<< loadsz << endl;
 
+    int v;
+    ret = route_piple.getNearestVertic(121.6486861, 31.3289695,0,true,v);
+
 
     route_piple.close();    
   
